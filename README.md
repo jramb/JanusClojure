@@ -345,6 +345,7 @@ For Heroku:
     $ heroku create --stack cedar
     $ git push heroku master
 
+My own Heroku instance for this demo app can be found here: http://freezing-light-439.herokuapp.com/
 
 ## Getting the tools
 
