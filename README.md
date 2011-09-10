@@ -1,38 +1,66 @@
 # JanusClojure
 
-JanusClojure is a demo web application that uses Clojure on both the server and the cliend side (ClojureScript).
+JanusClojure is a tutorial using a simple _demo_ web application
+to show the use of Clojure on both the server and the cliend side (ClojureScript on the client).
 
-*If all you have is Clojure, everything looks... much clearer...*
+The goal is to give you an idea on how easy it can be to develop state-of-the-art web applications without
+the fuzz. Shortness of the examples is important.
 
-The idea was to provide a minimal web application that contains many of the most basic tools and
+The idea of JanusClojure is to provide a minimal web application that contains many of the most basic tools and
 even some tips and tricks for client-server communication for newstarters to get going. Maybe you find this
-project useful as the starting point for your own application. JanusClojure just shows some techniques.
+project useful as the starting point for your own application. JanusClojure just shows some techniques, not all.
 
-The server-side is designed to either being run on a local compojure instance or to be hosted on *Heroku*.
+The server-side is designed to being run on a local compojure instance or optional to be hosted on *Heroku*.
 
-## Naming
+You should have an idea of what Clojure is before you dive into this.
+
+*If all you have is Clojure, everything looks... well, much clearer...*
+
+### Naming
 This little project is named after the two-faced roman god [Janus](http://en.wikipedia.org/wiki/Janus_%28mythology%29).
 
-Prerequisites:
+### What this is NOT
+JanusClojure will hopefully give ju a jump start, but it will
 
-1. Java (to be able to run Clojure)
-1. Leiningen
-1. ClojureScript
-1. Optional: Heroku account and tools for actual hosting
+* *not* teach you _Clojure_ or _ClojureScript_
+* *not* teach you _Google Closure_ (but maybe give you an idea how to use it)
+* *not* demonstrate "best practice" of anything, but things that work.
 
+## How this tutorial works
 
-## Bootstraping
+Either you just want to run this to see it work or you follow the steps in the tutorial.
+Or a creative combination of it. :-)
+
+### Just run it
+
+1. You will need leiningen (see 'Getting the tools' below), git and a JVM.
+1. `git clone git://github.com/jramb/JanusClojure.git`
+1. `cd JanusClojure`
+1. `lein run`
+1. Open http://localhost:8080 in any browser.
+
+### To follow the tutorial from scratch
+
+1. Install and set up the following tools (also see below "Getting the tools")
+    1. Java (to be able to run Clojure)
+    1. Leiningen
+    1. ClojureScript (this may need a non-Windows OS, not sure)
+    1. Very optional: Heroku account and tools for actual hosting
+1. Start with the chapter *Bootstrapping*
+
+## Bootstrapping
+(Start here if you want to follow the tutorial from scratch.)
 
 Created a new leiningen project:
 
     $ lein new janusclojure
     Created new project in: /home/jorg/projects/janusclojure
 
-If you want to host the app on Heroku (this is optional of course), create the Procfile:
+If you want to host the app on Heroku (this is optional of course), also create the Procfile:
 
     $ echo 'web: lein run -m janusclojure.core' >Procfile
 
-Modify the `project.clj` file to something like this, add `:main` and some libraries:
+Modify the `project.clj` file to something like this. Add `:main` and some libraries:
 
     (defproject janusclojure "1.0.0-SNAPSHOT"
       :description "A 200% Clojure web applications"
@@ -50,14 +78,13 @@ Now you can pull in the needed jars:
 
 ## Level 1: a very simple *Hello, world*
 Now for the fun part, the code writing!
-`lein new` left a simple file `src/janusclojure/core.clj` with only the `ns` part in it.
-Lets fill it with some code, change it to the following: some requires for pulling in compojure and jetty.
+
+`lein new` created a basic structure for a Clojure project, including a simple file `src/janusclojure/core.clj`
+with only the `ns` part in it.
+Lets fill it with some code! Change it to the following: some requires for pulling in compojure and jetty.
 Note that I use `:require` all the way. This is of course personal taste, but I like to know where functions
 come from.
 
-To start with we define only the `GET "/"` route which answers only to only just that. The `_`
-after the `GET` indicates for now that we are not interested in the request object and we return
-the static string `Hello, world`.
 
     (ns janusclojure.core
         (:require [ring.adapter.jetty :as jetty])
@@ -73,12 +100,16 @@ the static string `Hello, world`.
         (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]
             (jetty/run-jetty (var app-routes) {:port port})))
 
-That's it, now we can test it. Fire up the Jetty instance by calling:
+For this first level we define only the `GET "/"` route which answers only to only just that.
+The `_` after the `GET` indicates (for now) that we are not interested in the request object. We return
+only the static string `Hello, world`.
+
+That's it, now we can test it already! Fire up the Jetty instance by calling:
 
     $ lein run
 
 This starts the jetty instance listening on port 8080 (unless overruled by a environment variable `PORT`).
-To check the result, use a web browser and check `http://localhost:8080/`.
+To check the result, use a web browser and check http://localhost:8080/.
 
 You should see just that, "Hello, world!".
 
@@ -102,7 +133,7 @@ The result should be served under the URL *"/uuid"*, so we add the following to 
 Note that we still return a string, but we stringify a map with only one key `:uuid` which has the value of
 the fresh generated uuid. That means we talk Clojure to the client, yeah!
 
-Abort the Jetty instance (`Ctrl-C` and then `lein run` again) and check for http:localhost:8080/uuid in your
+Abort the Jetty instance (`Ctrl-C` and then `lein run` again) and check for http://localhost:8080/uuid in your
 browser. You should see something like this:
 
     {:uuid "f6627eaea076481b9e5ac674ed55a9d2"}
@@ -235,16 +266,16 @@ the cljs-file:
 
 There is a hole lot of stuff (but still quite little code). Some notes about this:
 
-*. The log function is just a litte debug helper. Unfortunately JavaScript has the tendency to silently swallow
+* The log function is just a litte debug helper. Unfortunately JavaScript has the tendency to silently swallow
 errors. Even the ClojureScript compiler is most of the time very silent. Some (log) commands are quite usefull.
 Also note that Google Closure has much more sofisticated logging possibilities, here I just generate a console.log
 command. This also shows (off) the `js*` command, which produces raw JavaScript.
-*. `random-text-input` is the HTML element with the id `random-text`. I could write that dom/getElement inline
+* `random-text-input` is the HTML element with the id `random-text`. I could write that dom/getElement inline
 as well, but
     1. The thing is inlined by the Google Closure compiler (if that would give a shorter code)
     1. Later we will reuse that element anyway.
-*. `events/listen` binds the "onClick" event to the button (with the id `getUUID`) to the function `fetch-clicked`.
-*. `fetch-clicked` is executed when the user clicks the "getUUID" button.
+* `events/listen` binds the "onClick" event to the button (with the id `getUUID`) to the function `fetch-clicked`.
+* `fetch-clicked` is executed when the user clicks the "getUUID" button.
 
 The function creates aXhrIo/send object, more specific a "GET" call to the given URL `/uuid`.
 The following function (nameless) is executed later when the result arrives.
@@ -283,7 +314,7 @@ This makes a fully optimized compilation, if you would like to be able to recogn
 
 You can also compile without any optimizations, but I will not cover that here.
 
-Last not least, add the generated `janusclojure.js` to the HTML page by adding this line just before the closing `</body>'
+Last not least, add the generated `janusclojure.js` to the HTML page by adding this line just before the closing `</body>`
 almost at the end of the `index.html` file:
 
     <script type="text/javascript" src="janusclojure.js"></script>
@@ -298,9 +329,9 @@ Now that was probably the hardest part. An active client HTML page that connects
 _TBD_
 
 
-## Putting it on the server
+## Hosting the application
 
-_Incomplete_
+Must be written. _Incomplete_!
 
 In the `janusclojure/` diretory:
 
@@ -315,19 +346,83 @@ For Heroku:
     $ git push heroku master
 
 
-## Usage
+## Getting the tools
 
-Besides this *README* all the files are in the repository. You might want to check out the project and run it locally.
-The files should be usable right away (i.e. you can `lein run` them or push them to Heroku).
+I am not trying to cover all the details, but this should work as a quick-starter.
+Note that I am using Linux. The tutorial above should theoretically work on Windows as well,
+but there might be some bumps on the road, and I do not cover this.
+The quickest way to solve all the problems is probably to install Linux, hehehe...
+
+Hmmm, note that all this applies only if you want to develop applications.
+
+### Java JVM
+Probably you have that one already in some way.
+
+### Leiningen
+Leiningen is an excellent build tool (anything I need for Clojure).
+
+A jump-start goes like this (I assume here that you have a `~/bin` directory
+which also is in your PATH.
+
+    $ cd ~/bin
+    $ wget https://github.com/technomancy/leiningen/raw/stable/bin/lein
+    $ chmod a+x lein
+    $ lein self-install
+
+
+### Clojure
+Clojure itself is just a jar-file, executed byt the Java JVM.
+Actually I find it the easiest way to let _leiningen_ fix that.
+If you just want a REPL, `lein repl` (even _without a project_) will give you one.
+If you ran `lein repl` in an existing leiningen project directory you get all
+the classpath correct without any fuzz.
+
+Really, if you have a machine without Clojure (pffft!), you can Clojure withing less than 60 seconds:
+Just do the leiningen install above, followed by a `lein repl` and you are going.
+
+
+### ClojureScript
+ClojureScript is alpha at the time. But it feels less alpha than many commercial products having reached
+version 2.3... ;-)
+
+Quick-start:
+
+    $ mkdir ~/clojure
+    $ cd ~/clojure
+    $ git clone git://github.com/clojure/clojurescript.git
+    $ cd clojurescript
+    $ script/bootstrap
+
+Quite optional, but I find it useful:
+
+    $ echo 'CLOJURESCRIPT_HOME=~/clojure/clojurescript' >>~/.bashrc
+    $ echo 'PATH=$PATH:$CLOJURESCRIPT_HOME/bin:$CLOJURESCRIPT_HOME/script' >>~/.bashrc
+
+### Heroku
+To be written... maybe. Until then, see http://heroku.com
+
+
+### Git, wget, curl, rlwrap, you favorite web browser
+These tools are really basic. curl and wget are not really necessary, but especially `curl`
+is really usefull. Also I recommend Chrome or Firefox with debugging tools (such as Firebug),
+it makes live so much easier.
 
 
 ## Feedback
-Feedback is very welcome. If you find stuff that could be done better (shorter or clearer, preferably), please
-let me know: jorg@jramb.com
+Feedback is very welcome. If you find stuff that could be done better (shorter or clearer, preferably) or essential
+things you think should be covered, please let me know: jorg@jramb.com
 
 ## License
 
 The JanusClojure example is stands under the [Creative Commons License](http://creativecommons.org/licenses/by/3.0/).
 
 ## Resources and links
-* Clojure on Heroku: https://gist.github.com/1001206 
+Thanks to all the giants whose shoulders we stand on. And the giants theses giants stand on...
+And special thanks to Rich Hickey (and the team) for Clojure. Really, thanks!
+
+* Clojure: http://clojure.org
+* Leiningen: https://github.com/technomancy/leiningen
+* Clojure on Heroku: https://gist.github.com/1001206
+* ClojureScript: https://github.com/clojure/clojurescript
+* Heroku: http://heroku.com
+
