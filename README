@@ -297,6 +297,21 @@ Now that was probably the hardest part. An active client HTML page that connects
 TBD
 
 
+## Putting it on the server
+
+In the `janusclojure/` diretory:
+
+    $ git init
+    $ echo src/html/out >>.gitignore
+    $ git add .
+    $ git commit -m "Initial check in"
+
+For Heroku:
+
+    $ heroku create --stack cedar
+    $ git push heroku master
+
+
 ## Usage
 
 Besides this *README* there are all the files in the repository. You might want to check out the project which contains all the files.
