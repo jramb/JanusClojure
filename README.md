@@ -1,6 +1,7 @@
 # JanusClojure
 
 JanusClojure is a demo web application that uses Clojure on both the server and the cliend side (ClojureScript).
+
 *If all you have is Clojure, everything looks... much clearer...*
 
 The idea was to provide a minimal web application that contains many of the most basic tools and
@@ -14,9 +15,9 @@ This little project is named after the two-faced roman god [Janus](http://en.wik
 
 Prerequisites:
 
-1. I was working on Linux (Ubuntu in my case).
-1. Java (for Clojure)
+1. Java (to be able to run Clojure)
 1. Leiningen
+1. ClojureScript
 1. Optional: Heroku account and tools for actual hosting
 
 
@@ -294,10 +295,12 @@ Now that was probably the hardest part. An active client HTML page that connects
 
 ## Level 5: sending data to the server
 
-TBD
+_TBD_
 
 
 ## Putting it on the server
+
+_Incomplete_
 
 In the `janusclojure/` diretory:
 
@@ -314,13 +317,13 @@ For Heroku:
 
 ## Usage
 
-Besides this *README* there are all the files in the repository. You might want to check out the project which contains all the files.
-They should be usable right away (i.e. you can `lein run` them or push them to Heroku).
+Besides this *README* all the files are in the repository. You might want to check out the project and run it locally.
+The files should be usable right away (i.e. you can `lein run` them or push them to Heroku).
 
 
 ## Feedback
 Feedback is very welcome. If you find stuff that could be done better (shorter or clearer, preferably), please
-let me know: megapatch@gmail.com
+let me know: jorg@jramb.com
 
 ## License
 
