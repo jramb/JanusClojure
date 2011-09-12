@@ -340,7 +340,8 @@ In the `janusclojure/` diretory:
     $ git add .
     $ git commit -m "Initial check in"
 
-For Heroku:
+If you have a Heroku account and set up correctly you can
+publish your web application directly to Heroku:
 
     $ heroku create --stack cedar
     $ git push heroku master
