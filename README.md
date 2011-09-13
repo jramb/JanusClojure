@@ -14,13 +14,13 @@ The server-side is designed to being run on a local compojure instance or option
 
 You should have an idea of what Clojure is before you dive into this.
 
-*If all you have is Clojure, everything looks... well, much clearer...*
+*If all you have is Clojure, everything looks... like an s-expression (well, much clearer...)*
 
 ### Naming
 This little project is named after the two-faced roman god [Janus](http://en.wikipedia.org/wiki/Janus_%28mythology%29).
 
 ### What this is NOT
-JanusClojure will hopefully give ju a jump start, but it will
+JanusClojure will hopefully give you a jump start, but it will
 
 * *not* teach you _Clojure_ or _ClojureScript_
 * *not* teach you _Google Closure_ (but maybe give you an idea how to use it)
@@ -340,7 +340,8 @@ In the `janusclojure/` diretory:
     $ git add .
     $ git commit -m "Initial check in"
 
-For Heroku:
+If you have a Heroku account and set up correctly you can
+publish your web application directly to Heroku:
 
     $ heroku create --stack cedar
     $ git push heroku master
@@ -415,7 +416,7 @@ things you think should be covered, please let me know: jorg@jramb.com
 
 ## License
 
-The JanusClojure example is stands under the [Creative Commons License](http://creativecommons.org/licenses/by/3.0/).
+The JanusClojure example is under the [Creative Commons License](http://creativecommons.org/licenses/by/3.0/).
 
 ## Resources and links
 Thanks to all the giants whose shoulders we stand on. And the giants theses giants stand on...
