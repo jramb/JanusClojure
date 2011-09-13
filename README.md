@@ -264,7 +264,7 @@ the cljs-file:
         event-type/CLICK
         fetch-clicked)
 
-There is a hole lot of stuff (but still quite little code). Some notes about this:
+That is a lot of stuff (but still quite little code). Some notes about this:
 
 * The log function is just a litte debug helper. Unfortunately JavaScript has the tendency to silently swallow
 errors. Even the ClojureScript compiler is most of the time very silent. Some (log) commands are quite usefull.
