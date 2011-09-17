@@ -24,10 +24,32 @@
            ;(log respTxt)
            (set! (.value random-text-input) (:uuid data))))))
 
+(defn receive-result [e]
+    (.setText (dom/getElement "info")))
+
+(defn send-button-clicked [e]
+    (let [your-name (dom/getElement "your-name")
+          your-number (dom/getElement "your-number")
+          name (.value your-name)
+          num  (.value your-number)]
+          (goog.net.XhrIo/send
+            "/process"
+            receive-result
+            ; FIXME body
+            )
+          ))
+
+
 (events/listen
     (dom/getElement "getUUID")
     event-type/CLICK
     fetch-clicked)
+
+(events/listen
+    (dom/getElement "sendBtn")
+    event-type/CLICK
+    send-button-clicked)
+
 
 (comment
 ; HOWTO compile:

@@ -308,6 +308,10 @@ and then you can compile the cljs file with
 
     (cljsc/build "janusclojure.cljs" {:optimizations :advanced :pretty-print false :output-to "janusclojure.js"})
 
+or maybe
+
+    (time (cljsc/build "janusclojure.cljs" {:optimizations :advanced :pretty-print false :output-to "janusclojure.js"}))
+
 This makes a fully optimized compilation, if you would like to be able to recognize your code, change to
 
     (cljsc/build "janusclojure.cljs" {:optimizations :simple :pretty-print true :output-to "janusclojure.js"})

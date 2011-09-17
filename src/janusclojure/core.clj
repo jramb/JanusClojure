@@ -18,22 +18,27 @@
   {:status 302
    :headers {"Location" loc}})
 
-(defn get-uuid []
+(defn get-uuid [req]
   ;(Thread/sleep 1000)
-  {:body (gen-uuid)})
+  {:body {:uuid (gen-uuid)}})
+
+(defn process-info [req]
+  (let [{:keys [your-name your-number random]} (:body req)]
+    (format "Hi, %s! You sent me the number %d and also '%s'."
+           your-name your-number random)))
 
 (compojure/defroutes app-routes
     (compojure/GET   "/"      _   (redirect-to "/index.html"))
     (compojure/GET   "/hello" _   "Hello, world!")
-    (compojure/GET   "/uuidold"  _ (str {:uuid (gen-uuid)}))
-    (compojure/GET   "/uuid2"  _ (str (get-uuid)))
     (->
       (compojure/routes
-        (compojure/GET   "/uuid"  _ (get-uuid))
+        (compojure/GET   "/uuid"      req (get-uuid req))
+        (compojure/POST  "/echo"      req req)  ; simple echo service!
+        ;(compojure/POST  "/backdoor"  req {:body (eval (:body req))}) ; do not enable this!! NOT!
+        (compojure/POST  "/process"   req (process-info req))
         )
       mywraps/wrap-clojure-simple
       mywraps/wrap-timer)
-    (compojure/GET   "/uuid3"  _ (str (get-uuid)))
     (route/resources "/" {:root "html"})
     (route/not-found "Page not found")
     )
