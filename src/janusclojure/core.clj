@@ -20,7 +20,7 @@
 
 (defn get-uuid []
   ;(Thread/sleep 1000)
-  {:body {:uuid (gen-uuid)}})
+  {:body (gen-uuid)})
 
 (compojure/defroutes app-routes
     (compojure/GET   "/"      _   (redirect-to "/index.html"))

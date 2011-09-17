@@ -37,12 +37,11 @@
   Reads :body to Clojure.
   If the body of the response is automatically converted again to Clojure."
   (fn [req]
-    (let [;removed for simplicity;req-type (:content-type req)
-          decoded-body (read-body (:body req))
+    (let [decoded-body (read-body (:body req))
           resp (handler (assoc req :body decoded-body))]
       (when resp
         (assoc resp
           :body (str (:body resp))
-          :content-type "application/clojure")))))
+          :headers (assoc (:headers resp) "content-type" "application/clojure"))))))
 
 
