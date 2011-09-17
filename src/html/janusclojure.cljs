@@ -13,6 +13,13 @@
 (def random-text-input
     (dom/getElement "random-text"))
 
+
+(defn data-from-result [e]
+    (let [xhr (.target e)
+          respTxt (. xhr (getResponseText))]
+      (log respTxt)
+      (reader/read-string respTxt)))
+
 (defn fetch-clicked [e]
    (goog.net.XhrIo/send
        "/uuid"
@@ -25,17 +32,26 @@
            (set! (.value random-text-input) (:uuid data))))))
 
 (defn receive-result [e]
-    (.setText (dom/getElement "info")))
+   (log "Hejho, hoppsan!")
+   #_(log (:result (data-from-result e)))
+   (dom/appendChild
+     (dom/getElement "info")
+     (dom/createDom "pre" nil (get (data-from-result e) :result)))
+   (log "Det var allt"))
+
 
 (defn send-button-clicked [e]
     (let [your-name (dom/getElement "your-name")
           your-number (dom/getElement "your-number")
           name (.value your-name)
-          num  (.value your-number)]
+          num  (.value your-number)
+          random (.value random-text-input)]
           (goog.net.XhrIo/send
             "/process"
             receive-result
-            ; FIXME body
+            "POST" ; defaults to "GET"
+            (pr-str
+                {:your-name name :your-number 123 :random random})
             )
           ))
 

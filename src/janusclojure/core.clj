@@ -24,8 +24,10 @@
 
 (defn process-info [req]
   (let [{:keys [your-name your-number random]} (:body req)]
-    (format "Hi, %s! You sent me the number %d and also '%s'."
-           your-name your-number random)))
+    {:body
+      {:result
+        (format "Hi, %s! You sent me the number %d and also '%s'."
+           your-name your-number random)}}))
 
 (compojure/defroutes app-routes
     (compojure/GET   "/"      _   (redirect-to "/index.html"))
