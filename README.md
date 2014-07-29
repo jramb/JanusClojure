@@ -280,8 +280,9 @@ as well, but
 The function creates aXhrIo/send object, more specific a "GET" call to the given URL `/uuid`.
 The following function (nameless) is executed later when the result arrives.
 
-AJAX at its best, though in our case we are not using XML, not even the normal JSON as a payload, but real good home-made
-serialized Clojure data.
+AJAX at its best, though in our case we are not using XML, not even the usual JSON as a payload, but real good home-made serialized Clojure data!
+(I mean, our client is written in Clojure (although executed in JavaScript, but
+that is not our problem) and the server is written in Clojure. Why bother with JSON if we don't have to?)
 
 To read that into a form that suits ClojureScript (that is: JavaScript), the result
 is parsed using `reader/read-string`. From then on it is easy to work with, `(:uuid data)` extracts the UUID.
@@ -330,8 +331,61 @@ Now that was probably the hardest part. An active client HTML page that connects
 
 ## Level 5: sending data to the server
 
-_TBD_
+Well, fetching data (Clojure data in our case) from the server is not enought
+fun in the long run.  After all that feels like calling a (remote) procedure
+with no parameters. We will now extend the code to send data as input *to* the
+server as well.
 
+For sending data or parameters in a request to the server we have basically two
+ways to go. The first one would be to pass some parameters in the request
+string, i e the request could look like this:
+
+    GET http://localhost:8080/do-something?param1=Hej&param2=123
+
+or even in the "path" of the query, like this:
+
+    GET http://localhost:8080/do-something/hej/123
+
+or even a combination of these (the idea is the same). That works, is done
+everywhere.
+Compojure has excellent support for this, but... I am not going to use it here.
+It is easy, but less flexible than what I have in mind.
+
+The alternative is to send information in the body of the request. To do this
+we have switch to `POST` instead of `GET`. Commonly the data (the parameters)
+are encoded using JSON, which of course is a good choice.
+
+We are going to use Clojure instead, even for the parameters sent *to* the
+server. Not because it is easier, but the same reason as above: why should we
+bother with another format if we have Clojure in both the server and the client
+(from the developers point of view). If you prefer JSON or if other non-Clojure
+clients have to be able to talk to your services then it is easy to switch over
+to JSON. We will see about that later.
+
+### The client part
+
+On the client part we will do some wiring. First we let the `sendBtn` become active:
+
+    (events/listen
+        (dom/getElement "sendBtn")
+        event-type/CLICK
+        send-button-clicked)
+
+Every time the `sendBtn` is clicked, the function `send-button-clicked` is called
+(with the event object as the single parameter, but we are not using this here):
+
+(defn send-button-clicked [e]
+    (let [your-name (dom/getElement "your-name")
+          your-number (dom/getElement "your-number")
+          name (.value your-name)
+          num  (int (.value your-number))
+          random (.value random-text-input)]
+          (goog.net.XhrIo/send
+            "/process"
+            receive-result
+            "POST" ; defaults to "GET"
+            (pr-str
+                {:your-name name :your-number 123 :random random}))))
 
 ## Hosting the application
 
@@ -401,8 +455,8 @@ Quick-start:
 
 Quite optional, but I find it useful:
 
-    $ echo 'CLOJURESCRIPT_HOME=~/clojure/clojurescript' >>~/.bashrc
-    $ echo 'PATH=$PATH:$CLOJURESCRIPT_HOME/bin:$CLOJURESCRIPT_HOME/script' >>~/.bashrc
+    $ echo 'export CLOJURESCRIPT_HOME=~/clojure/clojurescript' >>~/.bashrc
+    $ echo 'export PATH=$PATH:$CLOJURESCRIPT_HOME/bin:$CLOJURESCRIPT_HOME/script' >>~/.bashrc
 
 ### Heroku
 To be written... maybe. Until then, see http://heroku.com

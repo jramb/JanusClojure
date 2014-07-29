@@ -32,28 +32,21 @@
            (set! (.value random-text-input) (:uuid data))))))
 
 (defn receive-result [e]
-   (log "Hejho, hoppsan!")
-   #_(log (:result (data-from-result e)))
    (dom/appendChild
      (dom/getElement "info")
-     (dom/createDom "pre" nil (get (data-from-result e) :result)))
-   (log "Det var allt"))
+     (dom/createDom "pre" nil (get (data-from-result e) :result))))
 
 
 (defn send-button-clicked [e]
-    (let [your-name (dom/getElement "your-name")
-          your-number (dom/getElement "your-number")
-          name (.value your-name)
-          num  (.value your-number)
+    (let [name (.value (dom/getElement "your-name"))
+          num  (.value (dom/getElement "your-number"))
           random (.value random-text-input)]
           (goog.net.XhrIo/send
             "/process"
             receive-result
-            "POST" ; defaults to "GET"
+            "POST" ; default would have been "GET"
             (pr-str
-                {:your-name name :your-number 123 :random random})
-            )
-          ))
+                {:your-name name :your-number (int num) :random random}))))
 
 
 (events/listen

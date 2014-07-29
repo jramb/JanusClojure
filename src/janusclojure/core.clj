@@ -26,7 +26,7 @@
   (let [{:keys [your-name your-number random]} (:body req)]
     {:body
       {:result
-        (format "Hi, %s! You sent me the number %d and also '%s'."
+        (format "Hi, %s, this is your server speaking! You sent me the number %d and also '%s'."
            your-name your-number random)}}))
 
 (compojure/defroutes app-routes
